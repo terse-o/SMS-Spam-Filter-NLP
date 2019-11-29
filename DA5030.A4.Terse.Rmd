@@ -1,0 +1,146 @@
+---
+title: "DA5030.A4"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pressure, echo=FALSE}
+#plot(pressure)
+```
+
+```{r}
+# install.packages("tm")
+# install.packages("wordcloud")
+# install.packages("e1071")
+# install.packages("gmodels")
+# install.packages("klaR")
+```
+
+
+```{r}
+library(tm)
+library(wordcloud)
+library(e1071)
+library(gmodels)
+setwd("C:/Users/omkar/OneDrive/Desktop/R/DA5030.A4")
+sms_raw <- read.csv("da5030.spammsgdataset.csv", stringsAsFactors = FALSE, header = TRUE, encoding = "UTF-8")
+
+#converting type from character to factor
+sms_raw$type <- factor(sms_raw$type)
+str(sms_raw)
+table(sms_raw$type)
+
+#creating a vector storing collection of sms text
+sms_corpus <- VCorpus(VectorSource(sms_raw$text))
+inspect(sms_corpus[1:2])
+as.character(sms_corpus[[1]])
+
+#standardizing the sms text
+sms_corpus_clean <- tm_map(sms_corpus, content_transformer(tolower))
+
+#removing numbers from sms text
+sms_corpus_clean <- tm_map(sms_corpus_clean, removeNumbers)
+
+#removing stop words
+sms_corpus_clean <- tm_map(sms_corpus_clean, removeWords, stopwords())
+
+#removing punctuations
+sms_corpus_clean <- tm_map(sms_corpus_clean, removePunctuation)
+
+#stemming sms text
+sms_corpus_clean <- tm_map(sms_corpus_clean, stemDocument)
+
+#removing additional white spaces
+sms_corpus_clean <- tm_map(sms_corpus_clean, stripWhitespace)
+
+#creating Document Term Matrix
+sms_dtm <- DocumentTermMatrix(sms_corpus_clean)
+str(sms_dtm)
+
+sms_dtm_train <- sms_dtm[1:4181,]
+sms_dtm_test <- sms_dtm[4182:5574,]
+
+#storing labels for train and test datasets
+sms_train_labels <- sms_raw[1:4181,]$type
+sms_test_labels <- sms_raw[4182:5574,]$type
+
+#checking proportion of ham & spam 
+prop.table(table(sms_train_labels))
+prop.table(table(sms_test_labels))
+
+#creating word cloud to visualize word frequency
+wordcloud(sms_corpus_clean, min.freq = 50, random.order = FALSE)
+
+#subsetting ham and spam observations for word cloud
+spam <- subset(sms_raw, type == "spam")
+ham <- subset(sms_raw, type == "ham")
+
+#creating separate word clouds for spam and ham observations
+wordcloud(spam$text, max.words = 40, scale = c(3, 0.5))
+wordcloud(ham$text, max.words = 40, scale = c(3, 0.5))
+
+#finding frequent words
+sms_freq_words <- findFreqTerms(sms_dtm_train, 5)
+
+sms_dtm_freq_train <- sms_dtm_train[,sms_freq_words]
+sms_dtm_freq_test <- sms_dtm_test[,sms_freq_words]
+
+#defining function to convert counts to Yes/No strings
+convert_counts <- function(x) {
+  x <- ifelse(x>0, "Yes", "No")
+}
+
+sms_train <- apply(sms_dtm_freq_train, MARGIN = 2, convert_counts)
+sms_test <- apply(sms_dtm_freq_test, MARGIN = 2, convert_counts)
+
+#building Naive Bayes model on the training dataset
+sms_classifier <- naiveBayes(sms_train, sms_train_labels)
+
+#comparing predictions to true values
+sms_test_pred <- predict(sms_classifier, sms_test)
+
+#Confusion Matrix
+CrossTable(sms_test_pred, sms_test_labels, prop.chisq = FALSE, prop.t = FALSE, dnn = c('predicted', 'actual'))
+
+```
+
+```{r}
+#creating classifier 2 with laplace
+sms_classifier2 <- naiveBayes(sms_train, sms_train_labels, laplace = 1)
+sms_test_pred2 <- predict(sms_classifier2, sms_test)
+CrossTable(sms_test_pred2, sms_test_labels, prop.chisq = FALSE, prop.t = FALSE, dnn = c('predicted', 'actual'))
+
+```
+
+```{r}
+#loading package and dataset
+library(klaR)
+data(iris)
+
+#returns number of rows
+nrow(iris)
+summary(iris)
+
+#returns top 6 rows of dataset
+head(iris)
+
+#selcting an index to split dataset into train and test dataset, here 5,10,15,... elements
+testidx <- which(1:length(iris[, 1]) %% 5 == 0)
+
+# separate into training and testing datasets
+iristrain <- iris[-testidx,]
+iristest <- iris[testidx,]
+
+# apply Naive Bayes
+nbmodel <- NaiveBayes(Species~., data=iristrain)
+
+# check the accuracy
+prediction <- predict(nbmodel, iristest[,-5])
+table(prediction$class, iristest[,5])
+```
+
