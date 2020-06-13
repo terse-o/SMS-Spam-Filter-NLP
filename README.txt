@@ -5,11 +5,9 @@ Editor: RStudio (v1.2.1335)
 Description:Performed NLP to classify legitimate and spam SMS using Naive Bayes.
 Used Naive Bayes Classifier to predict the species of flowers.
 
-NOTE: As part of my graduate program, I created small projects like this to get a better understanding of AI and ML algortihms.
-
+NOTE: 
+For the model of predicting flower species in-built dataset called 'iris' was used from RStudio.
 Link for SMS text dataset: https://drive.google.com/file/d/1odIytheawV5KAxVCQHvCn4p2BvWXyPAc/view?usp=sharing
-For the module of predicting flower species in-built dataset called 'iris' was used from RStudio.
-
 Packages: tm, wordcloud, e1071, gmodels, klaR
 Model: Naive Bayes, tm (Text Mining)
 
