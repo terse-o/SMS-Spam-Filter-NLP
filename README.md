@@ -12,7 +12,8 @@ Packages: tm, wordcloud, e1071, gmodels, klaR
 Model: Naive Bayes, tm (Text Mining)
 
 OVERVIEW:
-SMS Spam Filter:
+
+SMS SPAM FILTER:
 
 -Load data
 
@@ -30,7 +31,7 @@ SMS Spam Filter:
 
 -Create Confusion Matrix to evaluate model
 
-Predicting flower species:
+PPREDICTING FLOWER SPECIES:
 
 -Load data
 
