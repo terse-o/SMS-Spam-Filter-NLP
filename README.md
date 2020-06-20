@@ -13,18 +13,31 @@ Model: Naive Bayes, tm (Text Mining)
 
 OVERVIEW:
 SMS Spam Filter:
+
 -Load data
+
 -Use tm to clean sms text
+
 -Split into train and test datasets
+
 -Subset spam and ham datasets
+
 -Visualize word frequency and find frequent words
+
 -Train Naive Bayes on training data
+
 -Use trained model to predicted cases from test set
+
 -Create Confusion Matrix to evaluate model
 
 Predicting flower species:
+
 -Load data
+
 -Split dataset into train and test set
+
 -Apply Naive Bayes on train set
+
 -Predict species from test set using trained model
+
 -Check the accuracy by creating a table for actual and predicted species
