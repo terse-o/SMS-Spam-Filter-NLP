@@ -117,30 +117,3 @@ CrossTable(sms_test_pred2, sms_test_labels, prop.chisq = FALSE, prop.t = FALSE, 
 
 ```
 
-```{r}
-#loading package and dataset
-library(klaR)
-data(iris)
-
-#returns number of rows
-nrow(iris)
-summary(iris)
-
-#returns top 6 rows of dataset
-head(iris)
-
-#selcting an index to split dataset into train and test dataset, here 5,10,15,... elements
-testidx <- which(1:length(iris[, 1]) %% 5 == 0)
-
-# separate into training and testing datasets
-iristrain <- iris[-testidx,]
-iristest <- iris[testidx,]
-
-# apply Naive Bayes
-nbmodel <- NaiveBayes(Species~., data=iristrain)
-
-# check the accuracy
-prediction <- predict(nbmodel, iristest[,-5])
-table(prediction$class, iristest[,5])
-```
-
