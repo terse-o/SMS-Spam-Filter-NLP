@@ -5,7 +5,6 @@ Editor: RStudio (v1.2.1335)
 Description:Performed NLP to classify legitimate and spam SMS using Naive Bayes.
 
 NOTE: 
-
 Link for SMS text dataset: https://drive.google.com/file/d/1odIytheawV5KAxVCQHvCn4p2BvWXyPAc/view?usp=sharing
 Packages: tm, wordcloud, e1071, gmodels, klaR
 Model: Naive Bayes, tm (Text Mining)
