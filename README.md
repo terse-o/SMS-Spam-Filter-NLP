@@ -1,7 +1,9 @@
-SMS Spam Filter & Naive Bayes to predict flower species
+SMS Spam Filter
 
 Language: R
+
 Editor: RStudio (v1.2.1335)
+
 Description:Performed NLP to classify legitimate and spam SMS using Naive Bayes.
 
 NOTE: 
